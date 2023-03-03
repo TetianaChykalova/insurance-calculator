@@ -1,10 +1,10 @@
-import './App.module.css';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
-import {useState} from "react";
-import {DateRange} from 'react-date-range';
-import {Calendar} from 'react-date-range';
+import React, {useState} from "react";
 import {addDays} from "date-fns";
+import Form from "./components/Form";
+import {Route, Routes, HashRouter, Navigate} from "react-router-dom";
+import Order from "./components/Order";
 
 function App() {
 
@@ -26,6 +26,10 @@ function App() {
     const onChangeAdditional = (e) => {
         let eAdd = e.target.value
         setAdditional(eAdd)
+        if(additional === 'no') {
+            setIsCancellation(false)
+            setIsSport(false)
+        }
     }
 
     const peopleIncrement = (e) => {
@@ -116,115 +120,60 @@ function App() {
 
     }
 
-    sum = baseSum * people
+    sum = (baseSum * people).toFixed(2)
 
 
     return (
-        <div>
-            <h1>
-                Insurance calculator
-            </h1>
-            <form action="#">
 
-                {/*type*/}
-                <div>
-                    <p>Insurance type</p>
-                    <div onChange={onChangeType}>
-                        <div>
-                            <input type="radio" name='insurance-type' value='annual' defaultChecked={true}/> Annual
-                            insurance
-                        </div>
-                        <div>
-                            <input type="radio" name='insurance-type' value='short'/> Short term insurance
-                        </div>
-                    </div>
+        <HashRouter>
 
-                </div>
+            <Routes>
 
-                {/*period*/}
-                <div>
-                    <p>Period</p>
-                    {
-                        type === 'annual' ?
-                            <div>
-                                <Calendar
-                                    onChange={onChangeAnnual}
-                                    date={dateAnnual}
-                                />
-                            </div> :
-                            <div>
-                                <DateRange
-                                    editableDateInputs={true}
-                                    onChange={onChangeShortPeriod}
-                                    moveRangeOnFirstSelection={false}
-                                    ranges={dateShort}
-                                />
-                            </div>
-                    }
-                </div>
+                <Route
+                    path='/form'
+                    element={
+                    <Form
+                        onChangeType={onChangeType}
+                        type={type}
+                        onChangeAnnual={onChangeAnnual}
+                        dateAnnual={dateAnnual}
+                        onChangeShortPeriod={onChangeShortPeriod}
+                        dateShort={dateShort}
+                        onChangePackageType={onChangePackageType}
+                        onChangeAdditional={onChangeAdditional}
+                        additional={additional}
+                        onChangeCancellation={onChangeCancellation}
+                        onChangeSport={onChangeSport}
+                        peopleDecrement={peopleDecrement}
+                        people={people}
+                        peopleIncrement={peopleIncrement}
+                        sum={sum}
+                    />
+                }
+                />
 
-                {/*package*/}
-                <div>
-                    <p>Package type</p>
-                    <div onChange={onChangePackageType}>
-                        <div>
-                            <input type="radio" name='package-type' value='basic'/> basic
-                        </div>
-                        <div>
-                            <input type="radio" name='package-type' value='extended' defaultChecked={true}/> extended
-                        </div>
-                        <div>
-                            <input type="radio" name='package-type' value='extra'/> extra
-                        </div>
-                    </div>
-                </div>
+                <Route
+                    path='/order'
+                    element={
+                    <Order
+                        type={type}
+                        people={people}
+                        packageType={packageType}
+                        isCancellation={isCancellation}
+                        isSport={isSport}
+                        totalDaysShot={totalDaysShot}
+                        sum={sum}
+                    />
+                }
+                />
 
-                {/*additional*/}
-                <div>
-                    <p>Any additional charges?</p>
-                    <div onChange={onChangeAdditional}>
-                        <div>
-                            <input type="radio" name='additional' value='no' defaultChecked={true}/> No
-                        </div>
-                        <div>
-                            <input type="radio" name='additional' value='yes'/> Yes
-                        </div>
-                    </div>
-                    {
-                        additional === 'yes' ?
-                            <div>
-                                <div onChange={onChangeCancellation}>
-                                    <input type="checkbox" name='cancellation' value='cancellation'/> Cancellation
-                                </div>
-                                <div onChange={onChangeSport}>
-                                    <input type="checkbox" name='sport' value='sport'/> Sport activities
-                                </div>
-                            </div> : ''
-                    }
-                </div>
+                <Route path="/" element={<Navigate to="/form" replace />} />
+            </Routes>
 
-                {/*people*/}
-                <div>
-                    <p>Number od people</p>
-                    <div>
-                        <button onClick={peopleDecrement}>-</button>
-                        <span>{people}</span>
-                        <button onClick={peopleIncrement}>+</button>
-                    </div>
-                </div>
+        </HashRouter>
 
-                <div>
-                    <p>Your cost of insurance: €{sum.toFixed(2)}</p>
-                </div>
-
-                <div>
-                    <button>order</button>
-                </div>
-
-            </form>
-
-        </div>
     );
 }
+
 
 export default App;
