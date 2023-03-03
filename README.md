@@ -1,70 +1,55 @@
-# Getting Started with Create React App
+# Insurance calculator
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Implementation
 
-## Available Scripts
+This app uses the following third-party libraries These dependencies are written in the package.json file
 
-In the project directory, you can run:
+    "react-router-dom": "^6.8.2",
+    "react-date-range": "^1.4.0",
+    "date-fns": "^2.29.3",
 
-### `npm start`
+During my acquaintance with React some time ago, I encountered a problem - the API request worked only locally. Therefore, I checked the correctness of the logic through Docker from the very beginning.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Design differences
+    
+I've added a button 'order' and a new page that displays the final information. All required fields have default values.
+I wasn't looking for a perfect design. The main thing was to reproduce the logic of the application.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## About build and deploy
 
-### `npm test`
+Link to the done website
+https://insurance-calculator.tetiana-chykalova.click/
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+##### If you need to work with the code, write npm install in your terminal, then all the necessary dependencies will be added for you locally
 
-### `npm run build`
+    npm install
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+All form fields are mandatory. The fields for entering the phone number and email have additional validation. I would really like to add validation to the field for entering the date of birth, but unfortunately, it is not there yet
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### The application is hosted using Docker, Nginx, and AWS EC2, ECR, Route53. Security certificate added using Certbot.
+##### If it is necessary to update the application, stop the "daemon" and perform the following actions:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Build a new static file using the docker build
 
-### `npm run eject`
+    docker build -t <<tag>> .
+    
+Push a local Docker representation using the docker push
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+    docker push <<tag>>
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+##### Next, use the key to go to the service and execute the following commands on behalf of the root
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Download the latest version of the application using the docker pull
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+    sudo docker pull <<tag>>
 
-## Learn More
+Run the new version as a "daemon" (in the example, the port used during the first setup is specified)
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+    sudo docker run -d -p <<port>> <<tag>>
+    
+## App problems
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+During development, I had an issue with the page reloading uncontrollably when clicking on the increase and decrease buttons for the number of people. This has never happened before. I solved this problem by adding "preventDefault()"
 
-### Code Splitting
+The problem that still remains is the delay in receiving data on additional charges. If the user first clicks "yes" and selects their option and then clicks "no", the price is not updated immediately
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
