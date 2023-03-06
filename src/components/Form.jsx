@@ -1,9 +1,12 @@
 import React from 'react';
-import s from "../App.module.css";
+import s from './Form.module.css'
 import {Calendar, DateRange} from "react-date-range";
 import {NavLink} from "react-router-dom";
 
 function Form(props) {
+
+    const checkedInput = (key, val) => key === val && `${s.checkedInput}`
+
     return (
         <div className={s.wrapper}>
             <div className={s.header}>
@@ -14,14 +17,14 @@ function Form(props) {
             <form action="#" className={s.form}>
 
                 {/*type*/}
-                <div>
+                <div className={s.insType}>
                     <p>Insurance type</p>
                     <div onChange={props.onChangeType}>
-                        <div>
+                        <div className={checkedInput(props.type, 'annual')}>
                             <input type="radio" name='insurance-type' value='annual' defaultChecked={true}/> Annual
                             insurance
                         </div>
-                        <div>
+                        <div className={checkedInput(props.type, 'short')}>
                             <input type="radio" name='insurance-type' value='short'/> Short term insurance
                         </div>
                     </div>
@@ -54,13 +57,13 @@ function Form(props) {
                     <div>
                         <p>Package type</p>
                         <div onChange={props.onChangePackageType}>
-                            <div>
+                            <div className={checkedInput(props.packageType, 'basic')}>
                                 <input type="radio" name='package-type' value='basic'/> basic
                             </div>
-                            <div>
+                            <div className={checkedInput(props.packageType, 'extended')}>
                                 <input type="radio" name='package-type' value='extended' defaultChecked={true}/> extended
                             </div>
-                            <div>
+                            <div className={checkedInput(props.packageType, 'extra')}>
                                 <input type="radio" name='package-type' value='extra'/> extra
                             </div>
                         </div>
@@ -70,10 +73,10 @@ function Form(props) {
                     <div>
                         <p>Any additional charges?</p>
                         <div onChange={props.onChangeAdditional}>
-                            <div>
+                            <div className={checkedInput(props.additional, 'no')}>
                                 <input type="radio" name='additional' value='no' defaultChecked={true}/> No
                             </div>
-                            <div>
+                            <div className={checkedInput(props.additional, 'yes')}>
                                 <input type="radio" name='additional' value='yes'/> Yes
                             </div>
                         </div>

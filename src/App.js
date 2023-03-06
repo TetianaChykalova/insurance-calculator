@@ -148,6 +148,7 @@ function App() {
                         people={people}
                         peopleIncrement={peopleIncrement}
                         sum={sum}
+                        packageType={packageType}
                     />
                 }
                 />
